@@ -2,6 +2,8 @@ import { useReducer } from 'react';
 import * as XLSX from 'xlsx';
 import { testMean, testFrequency, testSmirnov, testMethod4, testMethod5 } from './utils';
 import MethodSelection from './MethodSelection';
+import FrequencyTest from './FrequencyTest';
+import MeanTest from './MeanTest';
 
 const initialState = {
   numbers: [],
@@ -14,6 +16,12 @@ const initialState = {
     { value: 'testMethod4', label: 'Método 4' },
     { value: 'testMethod5', label: 'Método 5' },
   ],
+  // MeanTest
+  Zalpha2: 1.96, // Nivel de significancia del 5%
+
+  // Frequency Test
+  intervals: 6,
+  chiSquareCritical: 11.07, // Valor crítico para alpha = 0.05 y df = 5
 };
 
 const reducer = (state, action) => {
@@ -22,7 +30,6 @@ const reducer = (state, action) => {
       return { ...state, numbers: action.payload };
 
     case 'selectTest':
-      console.log(action.payload);
       return { ...state, selectedTest: action.payload };
 
     case 'runTest': {
@@ -33,9 +40,14 @@ const reducer = (state, action) => {
         testMethod4,
         testMethod5,
       };
+      const expectedFrequency = state.numbers.length / state.intervals;
 
-      const testResult = testFunctions[state.selectedTest](state.numbers);
-      console.log(testResult);
+      const testResult = testFunctions[state.selectedTest](
+        state.numbers,
+        state.intervals,
+        expectedFrequency,
+        state.chiSquareCritical
+      );
       return { ...state, result: testResult };
     }
     default:
@@ -94,14 +106,9 @@ export default function App() {
           </button>
         </div>
       )}
-      {state.result && (
-        <div className="mt-4 p-4 bg-gray-800 rounded-md">
-          <h2 className="text-lg font-bold">Resultados</h2>
-          <p>Media arimética: {state.result.mean}</p>
-          <p>Z0: {Math.abs(state.result.Z0)}</p>
-          <p>Resultado: {state.result.result}</p>
-        </div>
-      )}
+
+      {state.selectedTest === 'testMean' && state.result && <MeanTest state={state} />}
+      {state.selectedTest === 'testFrequency' && state.result && <FrequencyTest state={state} />}
     </div>
   );
 }

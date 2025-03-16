@@ -1,24 +1,42 @@
 // utils.js
 
 export function testMean(numbers) {
+  validateNumbers(numbers);
   const N = numbers.length;
-  if (N === 0) return { error: 'No hay números para analizar.' };
 
   const mean = numbers.reduce((sum, num) => sum + num, 0) / N;
   const Z0 = ((mean - 0.5) * Math.sqrt(N)) / Math.sqrt(1 / 12);
-  const Zalpha2 = 1.96; // Nivel de significancia del 5%
 
-  const result =
-    Math.abs(Z0) < Zalpha2
-      ? 'No se puede rechazar la hipótesis de que los números provienen de una distribución uniforme.'
-      : 'Se rechaza la hipótesis de que los números provienen de una distribución uniforme.';
+  const Zalpha2 = 1.96;
+
+  const result = Math.abs(Z0) < Zalpha2;
 
   return { mean, Z0, result };
 }
 
-export function testFrequency(numbers) {
-  return { message: 'Implementación pendiente para el Método 2.' };
-}
+export const testFrequency = (numbers, intervals, expectedFrequency, chiSquareCritical) => {
+  validateNumbers(numbers);
+  const intervalSize = 1 / intervals;
+  let observedFrequencies = new Array(intervals).fill(0);
+
+  // Calcular las frecuencias observadas
+  numbers.forEach((num) => {
+    const index = Math.min(Math.floor(num / intervalSize), intervals - 1);
+    observedFrequencies[index] += 1;
+  });
+
+  const chiValues = observedFrequencies.map(
+    (obs) => Math.pow(obs - expectedFrequency, 2) / expectedFrequency
+  );
+
+  // Calcular el valor total de chi-cuadrado
+  const chiSquare = chiValues.reduce((sum, value) => sum + value, 0);
+
+  // Determinar si se rechaza la hipótesis
+  const hypothesis = chiSquare < chiSquareCritical;
+
+  return { observedFrequencies, chiSquare, hypothesis, expectedFrequency };
+};
 
 export function testSmirnov(numbers) {
   return { message: 'Implementación pendiente para el Método 3.' };
@@ -30,4 +48,10 @@ export function testMethod4(numbers) {
 
 export function testMethod5(numbers) {
   return { message: 'Implementación pendiente para el Método 5.' };
+}
+
+export function validateNumbers(numbers) {
+  if (numbers.length === 0) return { error: 'No hay números para analizar.' };
+  if (numbers.some((num) => isNaN(num))) return { error: 'Hay números inválidos.' };
+  return null;
 }
