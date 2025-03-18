@@ -4,6 +4,7 @@ import { testMean, testFrequency, testSmirnov, testMethod4, testMethod5 } from '
 import MethodSelection from './MethodSelection';
 import FrequencyTest from './FrequencyTest';
 import MeanTest from './MeanTest';
+import SmirnovTest from './SmirnovTest';
 
 const initialState = {
   numbers: [],
@@ -109,6 +110,7 @@ export default function App() {
 
       {state.selectedTest === 'testMean' && state.result && <MeanTest state={state} />}
       {state.selectedTest === 'testFrequency' && state.result && <FrequencyTest state={state} />}
+      {state.selectedTest === 'testSmirnov' && state.result && <SmirnovTest state={state} />}
     </div>
   );
 }

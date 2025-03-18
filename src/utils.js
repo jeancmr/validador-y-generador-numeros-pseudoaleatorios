@@ -1,5 +1,3 @@
-// utils.js
-
 export function testMean(numbers) {
   validateNumbers(numbers);
   const N = numbers.length;
@@ -39,7 +37,36 @@ export const testFrequency = (numbers, intervals, expectedFrequency, chiSquareCr
 };
 
 export function testSmirnov(numbers) {
-  return { message: 'Implementación pendiente para el Método 3.' };
+  validateNumbers(numbers);
+
+  const n = numbers.length;
+  const sortedNumbers = [...numbers].sort((a, b) => a - b);
+
+  let maxDiff = 0;
+  let table = [];
+
+  sortedNumbers.forEach((Xi, i) => {
+    const Fn = (i + 1) / n;
+    const diff = Math.abs(Fn - Xi);
+    if (diff > maxDiff) maxDiff = diff;
+
+    table.push({
+      i: i + 1,
+      Xi: Xi.toFixed(4),
+      Fn: Fn.toFixed(4),
+      diff: diff.toFixed(4),
+    });
+  });
+
+  // Obtener valor crítico (dalpha)
+  let dalpha = ksTable[n];
+  if (!dalpha) {
+    // Usar fórmula aproximada si n > 100
+    dalpha = 1.36 / Math.sqrt(n);
+  }
+
+  const hypothesis = maxDiff < dalpha;
+  return { table, Dn: maxDiff, dalpha, hypothesis };
 }
 
 export function testMethod4(numbers) {
@@ -55,3 +82,37 @@ export function validateNumbers(numbers) {
   if (numbers.some((num) => isNaN(num))) return { error: 'Hay números inválidos.' };
   return null;
 }
+
+// Tabla de valores críticos (alpha 5%) para la prueba de Kolmogorov-Smirnov
+const ksTable = {
+  1: 0.975,
+  2: 0.842,
+  3: 0.708,
+  4: 0.624,
+  5: 0.563,
+  6: 0.521,
+  7: 0.486,
+  8: 0.457,
+  9: 0.432,
+  10: 0.409,
+  11: 0.391,
+  12: 0.375,
+  13: 0.361,
+  14: 0.349,
+  15: 0.338,
+  16: 0.328,
+  17: 0.318,
+  18: 0.309,
+  19: 0.301,
+  20: 0.294,
+  25: 0.264,
+  30: 0.242,
+  35: 0.23,
+  40: 0.21,
+  50: 0.188,
+  60: 0.172,
+  70: 0.16,
+  80: 0.15,
+  90: 0.141,
+  100: 0.134,
+};
