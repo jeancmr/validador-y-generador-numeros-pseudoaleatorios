@@ -69,11 +69,80 @@ export function testSmirnov(numbers) {
   return { table, Dn: maxDiff, dalpha, hypothesis };
 }
 
-export function testMethod4(numbers) {
-  return { message: 'Implementación pendiente para el Método 4.' };
+export function testRunsUpDown(numbers) {
+  validateNumbers(numbers);
+  const N = numbers.length;
+  const binarySeq = numbers.map((ui) => (ui < 0.5 ? 0 : 1));
+
+  let runs = [];
+  let length = 1;
+  let runNumber = 1;
+
+  const tableData = [
+    { i: 1, ui: numbers[0], binary: binarySeq[0], runNumber, runValue: 1, length: 1 }, // la primera fila arranca en uno
+  ];
+
+  for (let i = 1; i < binarySeq.length; i++) {
+    let runValue = 0; // por defecto no hay cambio
+
+    if (binarySeq[i] !== binarySeq[i - 1]) {
+      // Si hay cambio en el binario
+      runs.push(length); //se guarda la longitud de la corrida anterior
+      length = 1; // Se resetea la longitud
+      runNumber++;
+      runValue = 1; // acá se inicia una nueva corrida
+    } else {
+      length++;
+    }
+
+    tableData.push({
+      i: i + 1,
+      ui: numbers[i],
+      binary: binarySeq[i],
+      runNumber,
+      runValue,
+      length,
+    });
+  }
+  runs.push(length); // Se agrega la última corrida
+
+  // Se calcula la frecuencia observada (FO) de cada longitud de corrida
+  const freqObs = {};
+  runs.forEach((r) => {
+    freqObs[r] = (freqObs[r] || 0) + 1;
+  });
+
+  // Se calcula la frecuencia esperada (FE) y el Chi-cuadrado
+  const chiRows = [];
+  let chiSquare = 0;
+  Object.keys(freqObs).forEach((k) => {
+    const i = parseInt(k);
+    const FE = (N - i + 3) / Math.pow(2, i + 1);
+    const FO = freqObs[i];
+    const chi = Math.pow(FO - FE, 2) / FE;
+    chiRows.push({ length: i, FE: FE.toFixed(3), FO, chi: chi.toFixed(3) });
+    chiSquare += chi;
+  });
+
+  // calculando grados de libertad
+  const df = Object.keys(freqObs).length - 1;
+
+  const chiCritical = chiTable[df] || 'No table value';
+
+  const hypothesis = chiSquare < chiCritical && chiCritical !== 'No table value';
+
+  return {
+    tableData,
+    chiRows,
+    chiSquare: chiSquare.toFixed(3),
+    chiCritical,
+    df,
+    hypothesis,
+  };
 }
 
 export function testMethod5(numbers) {
+  console.log(numbers);
   return { message: 'Implementación pendiente para el Método 5.' };
 }
 
@@ -115,4 +184,18 @@ const ksTable = {
   80: 0.15,
   90: 0.141,
   100: 0.134,
+};
+
+// Tabla valores críticos (alpha 5%) para la prueba de corrida arriba y abajo del promedio
+const chiTable = {
+  1: 3.841,
+  2: 5.991,
+  3: 7.815,
+  4: 9.488,
+  5: 11.07,
+  6: 12.592,
+  7: 14.067,
+  8: 15.507,
+  9: 16.919,
+  10: 18.307,
 };

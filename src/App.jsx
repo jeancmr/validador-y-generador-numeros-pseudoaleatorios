@@ -1,20 +1,21 @@
 import { useReducer } from 'react';
 import * as XLSX from 'xlsx';
-import { testMean, testFrequency, testSmirnov, testMethod4, testMethod5 } from './utils';
+import { testMean, testFrequency, testSmirnov, testRunsUpDown, testMethod5 } from './utils';
 import MethodSelection from './MethodSelection';
 import FrequencyTest from './FrequencyTest';
 import MeanTest from './MeanTest';
 import SmirnovTest from './SmirnovTest';
+import RunsUpDown from './RunsUpDown';
 
 const initialState = {
   numbers: [],
   result: null,
   selectedTest: null,
   options: [
-    { value: 'testMean', label: 'Prueba de Promedios' },
+    { value: 'testMean', label: 'Prueba de promedios' },
     { value: 'testFrequency', label: 'Prueba de frecuencias' },
     { value: 'testSmirnov', label: 'Prueba de Kolmogorov-Smirnov' },
-    { value: 'testMethod4', label: 'Método 4' },
+    { value: 'testRunsUpDown', label: 'Prueba de corrida arriba y abajo del promedio' },
     { value: 'testMethod5', label: 'Método 5' },
   ],
   // MeanTest
@@ -38,7 +39,7 @@ const reducer = (state, action) => {
         testMean,
         testFrequency,
         testSmirnov,
-        testMethod4,
+        testRunsUpDown,
         testMethod5,
       };
       const expectedFrequency = state.numbers.length / state.intervals;
@@ -111,6 +112,7 @@ export default function App() {
       {state.selectedTest === 'testMean' && state.result && <MeanTest state={state} />}
       {state.selectedTest === 'testFrequency' && state.result && <FrequencyTest state={state} />}
       {state.selectedTest === 'testSmirnov' && state.result && <SmirnovTest state={state} />}
+      {state.selectedTest === 'testRunsUpDown' && state.result && <RunsUpDown state={state} />}
     </div>
   );
 }
