@@ -1,6 +1,6 @@
 const FrequencyTest = ({ state }) => {
-  const { observedFrequencies, chiSquare, hypothesis, expectedFrequency } = state.result;
-  const { chiSquareCritical } = state;
+  const { observedFrequencies, chiSquare, hypothesis, expectedFrequency, chiSquareCritical, df } =
+    state.result;
 
   return (
     <div className="mt-4 p-4 bg-gray-800 rounded-md">
@@ -32,15 +32,23 @@ const FrequencyTest = ({ state }) => {
       )}
 
       <div className="mt-4 p-4 bg-gray-900 rounded">
+        <h2 className="text-lg font-bold">Resultados</h2>
+
         <p>
-          <strong>Chi-Cuadrado Calculado:</strong> {chiSquare.toFixed(2)}
+          <strong>Chi-Cuadrado:</strong> {chiSquare.toFixed(2)}
+        </p>
+        <p>
+          <strong>Grados de libertad:</strong> {df}
         </p>
         <p>
           <strong>Valor Crítico (α=0.05):</strong> {chiSquareCritical}
         </p>
+
+        <p>{`${chiSquare.toFixed(2)} < ${chiSquareCritical}`}</p>
+
         <p className={`mt-2 font-bold ${hypothesis ? 'text-green-600' : 'text-red-600'}`}>
           {hypothesis
-            ? 'No se puede rechazar la hipótesis de uniformidad.'
+            ? 'No se puede rechazar la hipótesis de que la muestra proviene de una distribución uniforme.'
             : 'Se rechaza la hipótesis de uniformidad.'}
         </p>
       </div>

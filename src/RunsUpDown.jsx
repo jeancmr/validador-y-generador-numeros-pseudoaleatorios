@@ -51,17 +51,21 @@ export default function RunsUpDown({ state }) {
       </table>
 
       <div className="mt-4 p-4 bg-gray-900 rounded">
+        <h2 className="text-lg font-bold">Resultados</h2>
+
         <p>
-          Chi-Cuadrado Total: <strong>{chiSquare}</strong>
+          <strong>Chi-Cuadrado Total: </strong> {chiSquare}
         </p>
 
         <p>
-          Grados de Libertad (df): <strong>{df}</strong>
+          <strong>Grados de Libertad (df): </strong> {df}
         </p>
 
         <p>
-          Valor Crítico (5%): <strong>{chiCritical}</strong>
+          <strong>Valor Crítico (5%): </strong> {chiCritical}
         </p>
+
+        <p>{`${chiSquare} < ${chiCritical}`}</p>
 
         <p className={`mt-2 font-bold ${hypothesis ? 'text-green-600' : 'text-red-600'}`}>
           {hypothesis

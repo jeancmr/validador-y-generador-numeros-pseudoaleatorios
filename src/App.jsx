@@ -1,11 +1,12 @@
 import { useReducer } from 'react';
 import * as XLSX from 'xlsx';
-import { testMean, testFrequency, testSmirnov, testRunsUpDown, testMethod5 } from './utils';
+import { testMean, testFrequency, testSmirnov, testRunsUpDown, testDistanceGap } from './utils';
 import MethodSelection from './MethodSelection';
 import FrequencyTest from './FrequencyTest';
 import MeanTest from './MeanTest';
 import SmirnovTest from './SmirnovTest';
 import RunsUpDown from './RunsUpDown';
+import GapTest from './GapTest';
 
 const initialState = {
   numbers: [],
@@ -16,14 +17,11 @@ const initialState = {
     { value: 'testFrequency', label: 'Prueba de frecuencias' },
     { value: 'testSmirnov', label: 'Prueba de Kolmogorov-Smirnov' },
     { value: 'testRunsUpDown', label: 'Prueba de corrida arriba y abajo del promedio' },
-    { value: 'testMethod5', label: 'Método 5' },
+    {
+      value: 'testDistanceGap',
+      label: 'Prueba de la distancia (números pseudoaleatorios considerados como reales)',
+    },
   ],
-  // MeanTest
-  Zalpha2: 1.96, // Nivel de significancia del 5%
-
-  // Frequency Test
-  intervals: 6,
-  chiSquareCritical: 11.07, // Valor crítico para alpha = 0.05 y df = 5
 };
 
 const reducer = (state, action) => {
@@ -32,7 +30,7 @@ const reducer = (state, action) => {
       return { ...state, numbers: action.payload };
 
     case 'selectTest':
-      return { ...state, selectedTest: action.payload };
+      return { ...state, selectedTest: action.payload, result: null };
 
     case 'runTest': {
       const testFunctions = {
@@ -40,15 +38,15 @@ const reducer = (state, action) => {
         testFrequency,
         testSmirnov,
         testRunsUpDown,
-        testMethod5,
+        testDistanceGap,
       };
-      const expectedFrequency = state.numbers.length / state.intervals;
+      // const expectedFrequency = state.numbers.length / state.intervals;
 
       const testResult = testFunctions[state.selectedTest](
-        state.numbers,
-        state.intervals,
-        expectedFrequency,
-        state.chiSquareCritical
+        state.numbers
+        // state.intervals,
+        // expectedFrequency,
+        // state.chiSquareCritical
       );
       return { ...state, result: testResult };
     }
@@ -113,6 +111,7 @@ export default function App() {
       {state.selectedTest === 'testFrequency' && state.result && <FrequencyTest state={state} />}
       {state.selectedTest === 'testSmirnov' && state.result && <SmirnovTest state={state} />}
       {state.selectedTest === 'testRunsUpDown' && state.result && <RunsUpDown state={state} />}
+      {state.selectedTest === 'testDistanceGap' && state.result && <GapTest state={state} />}
     </div>
   );
 }

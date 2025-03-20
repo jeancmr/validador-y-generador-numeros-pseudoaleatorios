@@ -28,24 +28,33 @@ const SmirnovTest = ({ state }) => {
       )}
 
       <div className="mt-4 p-4 bg-gray-900 rounded">
-        <p>
+        <h2 className="text-lg font-bold">Resultados</h2>
+
+        {/* <p>
           Dn: <strong>{Dn}</strong>
+        </p> */}
+
+        <p>
+          <strong>Dn: </strong> {Dn}
         </p>
 
         <p>
-          Tamaño de la muestra (n): <strong>{tableData.length}</strong>
+          <strong>Tamaño de la muestra (n): </strong> {tableData.length}
         </p>
 
         <p>
-          α (alpha): <strong>5%</strong>
+          <strong>α (alpha): </strong> 5%
         </p>
+
         <p>
-          dα,n (dalpha,n): <strong>{dalpha}</strong>
+          <strong>dα,n (dalpha,n): </strong> {dalpha}
         </p>
+
+        <p>{`${Dn} < ${dalpha}`}</p>
 
         <p className={`mt-2 font-bold ${hypothesis ? 'text-green-600' : 'text-red-600'}`}>
           {hypothesis
-            ? 'No se puede rechazar la hipótesis de uniformidad.'
+            ? 'No se puede rechazar la hipótesis de que los números pseudoaleatorios generados provienen de una distribución uniforme.'
             : 'Se rechaza la hipótesis de uniformidad.'}
         </p>
       </div>
