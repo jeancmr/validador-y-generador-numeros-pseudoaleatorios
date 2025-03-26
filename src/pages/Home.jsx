@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 export default function Home() {
   return (
     <div className="p-8 bg-gray-900 min-h-screen text-white flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-8 text-center">¿Qué deseas hacer?</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center">Escoja una opción</h1>
 
       <div className="flex flex-col space-y-6 w-full max-w-md">
         <Link
