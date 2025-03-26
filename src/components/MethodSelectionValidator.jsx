@@ -1,4 +1,4 @@
-export default function MethodSelection({ options, dispatch, selectedTest }) {
+export default function MethodSelectionValidator({ options, dispatch, selectedTest }) {
   return (
     <div className="p-4 bg-gray-800 text-white rounded-md">
       <h2 className="text-lg font-bold mb-2">
