@@ -19,6 +19,12 @@ export default function Home() {
         >
           Validar Números Pseudoaleatorios
         </Link>
+        <Link
+          to="/probabilidad"
+          className="bg-gray-700 text-white px-6 py-4 rounded-md text-center hover:bg-gray-600 transition"
+        >
+          Obtener probabilidad con variables no uniformes
+        </Link>
       </div>
     </div>
   );

@@ -1,5 +1,4 @@
 const SmirnovTest = ({ state }) => {
-  // return { table, Dn: maxDiff, dalpha, hypothesis };
   const { table: tableData, Dn, dalpha, hypothesis } = state.result;
 
   return (
@@ -29,10 +28,6 @@ const SmirnovTest = ({ state }) => {
 
       <div className="mt-4 p-4 bg-gray-900 rounded">
         <h2 className="text-lg font-bold">Resultados</h2>
-
-        {/* <p>
-          Dn: <strong>{Dn}</strong>
-        </p> */}
 
         <p>
           <strong>Dn: </strong> {Dn}
