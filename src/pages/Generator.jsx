@@ -1,82 +1,10 @@
 import { useReducer } from 'react';
 import * as XLSX from 'xlsx';
+import { reducer, initialState } from '../reducers/generatorReducer';
 import Form from '../components/Form';
-import {
-  congruencialMixto,
-  congruencialMultiplicativo,
-  cuadradoMedio,
-  congruencialCuadratico,
-  blumBlumShub,
-} from '../utils/utils.generador';
 import MethodSelectionGenerator from '../components/MethodSelectionGenerator';
-import Button from '../components/Button';
-import BackButton from '../components/BackButton';
-
-const initialState = {
-  sequence: [],
-  period: null,
-  option: null,
-  normalizedValues: null,
-  options: [
-    {
-      name: 'Congruencial Mixto',
-      value: 'mixto',
-    },
-    {
-      name: 'Congruencial Multiplicativo',
-      value: 'multiplicativo',
-    },
-    {
-      name: 'Cuadrado medio',
-      value: 'cuadradomedio',
-    },
-    {
-      name: 'Congruencial cuadrático',
-      value: 'cuadratico',
-    },
-    { name: 'Blum Blum Shub', value: 'bbs' }, // Nueva opción
-  ],
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case 'changeOption':
-      return {
-        ...state,
-        option: action.payload,
-      };
-
-    case 'generateSequence': {
-      const { a, b, c, m, x0, n } = action.payload;
-      let result = {};
-
-      if (state.option === 'mixto') {
-        result = congruencialMixto(+a, +c, +m, +x0, +n);
-      } else if (state.option === 'multiplicativo') {
-        result = congruencialMultiplicativo(+a, +m, +x0, +n);
-      } else if (state.option === 'cuadradomedio') {
-        result = cuadradoMedio(+x0, +n);
-      } else if (state.option === 'cuadratico') {
-        result = congruencialCuadratico(+a, +b, +c, +m, +x0, +n);
-      } else if (state.option === 'bbs') {
-        result = blumBlumShub(+a, +b, +x0, +n);
-      }
-
-      return {
-        ...state,
-        sequence: result.sequence,
-        period: state.option === 'cuadradomedio' ? null : result.period,
-        normalizedValues: result.normalizedValues,
-      };
-    }
-
-    case 'reset':
-      return initialState;
-
-    default:
-      return state;
-  }
-}
+import Button from '../components/shared/Button';
+import BackButton from '../components/shared/BackButton';
 
 export default function Generator() {
   const [state, dispatch] = useReducer(reducer, initialState);

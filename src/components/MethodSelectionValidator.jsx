@@ -1,4 +1,6 @@
 export default function MethodSelectionValidator({ options, dispatch, selectedTest }) {
+  console.log('MethodSelectionValidator options:', options);
+
   return (
     <div className="p-4 bg-gray-800 text-white rounded-md">
       <h2 className="text-lg font-bold mb-2">

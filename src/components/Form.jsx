@@ -6,7 +6,7 @@ import {
   validateCuadratico,
   validateBBS,
 } from '../utils/utils.generador';
-import Button from '../components/Button';
+import Button from '../components/shared/Button';
 
 export default function Form({ option, dispatch }) {
   const [params, setParams] = useState({

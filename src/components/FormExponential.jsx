@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Button from '../components/Button';
+import Button from '../components/shared/Button';
 
 export default function FormExponential({ dispatch }) {
   const [name, setName] = useState('');
