@@ -63,3 +63,38 @@ export function exponentialDistribution(randomNumbers, variableName, mean, compa
     probability,
   };
 }
+
+export function uniformDistributionV2(randomNumbers, variableName, a, b, compareValue, operator) {
+  if (!randomNumbers.length || a === undefined || b === undefined) {
+    return { randomNumbers, computedValues: [], probability: 0 };
+  }
+
+  // X = -λ * ln(R)
+  const computedValues = randomNumbers.map((R) => ({
+    random: R,
+    value: a + R * (b - a),
+  }));
+
+  // contando cuántos cumplen la condición
+  const compareFn = {
+    '<': (x) => x < compareValue,
+    '>': (x) => x > compareValue,
+    '=': (x) => x === compareValue,
+    '<=': (x) => x <= compareValue,
+    '>=': (x) => x >= compareValue,
+  };
+  console.log(variableName, a, b, compareValue, operator);
+
+  const countMatching = computedValues.filter((item) => compareFn[operator](item.value)).length;
+
+  // probabilidad = num de casos favorables / num de casos posibles
+  const probability = (countMatching / randomNumbers.length).toFixed(4);
+
+  return {
+    randomNumbers,
+    computedValues,
+    probabilityText: `Probabilidad de que ${variableName} sea ${operator} ${compareValue}: ${probability}`,
+    countMatching,
+    probability,
+  };
+}

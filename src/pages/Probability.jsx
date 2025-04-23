@@ -4,13 +4,16 @@ import { reducer, initialState } from '../reducers/probabilityReducer';
 import BackButton from '../components/shared/BackButton';
 import MethodSelectionDistribution from '../components/MethodSelectionDistribution';
 import FormUniform from '../components/FormUniform';
+import FormUniformV2 from '../components/FormUniformV2';
 import FormExponential from '../components/FormExponential';
 import DistributionTableUniform from '../components/DistributionTableUniform';
 import DistributionTableExponential from '../components/DistributionTableExponential';
+import DistributionTableUniformV2 from '../components/DistributionTableUniformV2';
 
 const OPTIONS = [
   { value: 'uniformDistribution', label: 'Distribución uniforme' },
   { value: 'exponentialDistribution', label: 'Distribución exponencial' },
+  { value: 'uniformDistributionV2', label: 'Distribución uniforme V2' },
 ];
 
 export default function Probability() {
@@ -49,15 +52,17 @@ export default function Probability() {
         />
       </div>
 
-      {option ? (
-        option === 'uniformDistribution' ? (
-          <FormUniform dispatch={dispatch} option={option} maxVariables={numbers.length} />
-        ) : (
-          <FormExponential dispatch={dispatch} option={option} maxVariables={numbers.length} />
-        )
-      ) : (
-        <MethodSelectionDistribution dispatch={dispatch} options={OPTIONS} />
+      {option === 'uniformDistribution' && (
+        <FormUniform dispatch={dispatch} option={option} maxVariables={numbers.length} />
       )}
+      {option === 'exponentialDistribution' && (
+        <FormExponential dispatch={dispatch} option={option} maxVariables={numbers.length} />
+      )}
+      {option === 'uniformDistributionV2' && (
+        <FormUniformV2 dispatch={dispatch} option={option} maxVariables={numbers.length} />
+      )}
+
+      {!option && <MethodSelectionDistribution dispatch={dispatch} options={OPTIONS} />}
 
       {option === 'uniformDistribution' && result && (
         <DistributionTableUniform
@@ -68,6 +73,10 @@ export default function Probability() {
       )}
       {option === 'exponentialDistribution' && result && (
         <DistributionTableExponential variableName={state.variableName} result={result} />
+      )}
+
+      {option === 'uniformDistributionV2' && result && (
+        <DistributionTableUniformV2 variableName={state.variableName} result={result} />
       )}
     </div>
   );

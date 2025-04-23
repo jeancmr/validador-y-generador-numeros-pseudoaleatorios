@@ -1,4 +1,8 @@
-import { uniformDistribution, exponentialDistribution } from '../utils/utils.probability';
+import {
+  uniformDistribution,
+  exponentialDistribution,
+  uniformDistributionV2,
+} from '../utils/utils.probability';
 
 export const initialState = {
   numbers: [],
@@ -56,9 +60,11 @@ export function reducer(state, action) {
       const distribution = {
         uniformDistribution,
         exponentialDistribution,
+        uniformDistributionV2,
       };
 
       let distributionResult = null;
+
       if (state.option === 'uniformDistribution') {
         distributionResult = distribution.uniformDistribution(state.numbers, state.variables);
       }
@@ -68,6 +74,17 @@ export function reducer(state, action) {
           state.numbers,
           state.variableName,
           state.mean,
+          state.compareValue,
+          state.operator
+        );
+      }
+
+      if (state.option === 'uniformDistributionV2') {
+        distributionResult = distribution.uniformDistributionV2(
+          state.numbers,
+          state.variableName,
+          state.a,
+          state.b,
           state.compareValue,
           state.operator
         );
