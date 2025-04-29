@@ -2,6 +2,7 @@ import {
   uniformDistribution,
   exponentialDistribution,
   uniformDistributionV2,
+  poissonDistribution,
 } from '../utils/utils.probability';
 
 export const initialState = {
@@ -56,11 +57,21 @@ export function reducer(state, action) {
         operator: action.payload.operator,
       };
 
+    case 'setPoissonVariables':
+      return {
+        ...state,
+        variableName: action.payload.variableName,
+        mean: action.payload.mean,
+        compareValue: action.payload.compareValue,
+        operator: action.payload.operator,
+      };
+
     case 'execute': {
       const distribution = {
         uniformDistribution,
         exponentialDistribution,
         uniformDistributionV2,
+        poissonDistribution,
       };
 
       let distributionResult = null;
@@ -87,6 +98,16 @@ export function reducer(state, action) {
           state.b,
           state.compareValue,
           state.operator
+        );
+      }
+
+      if (state.option === 'poissonDistribution') {
+        distributionResult = distribution.poissonDistribution(
+          state.numbers,
+          state.variableName,
+          state.compareValue,
+          state.operator,
+          state.mean
         );
       }
 
