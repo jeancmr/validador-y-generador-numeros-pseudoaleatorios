@@ -7,15 +7,18 @@ import FormUniform from '../components/FormUniform';
 import FormExponential from '../components/FormExponential';
 import FormUniformV2 from '../components/FormUniformV2';
 import FormPoisson from '../components/FormPoisson';
+import FormNormal from '../components/FormNormal';
 import DistributionTableUniform from '../components/DistributionTableUniform';
 import DistributionTableExponential from '../components/DistributionTableExponential';
 import DistributionTableUniformV2 from '../components/DistributionTableUniformV2';
 import DistributionTablePoisson from '../components/DistributionTablePoisson';
+import DistributionTableNormal from '../components/DistributionTableNormal';
 const OPTIONS = [
   { value: 'uniformDistribution', label: 'Distribución uniforme' },
   { value: 'exponentialDistribution', label: 'Distribución exponencial' },
   { value: 'uniformDistributionV2', label: 'Distribución uniforme V2' },
   { value: 'poissonDistribution', label: 'Distribución de Poisson' },
+  { value: 'normalDistribution', label: 'Distribución normal' },
 ];
 
 export default function Probability() {
@@ -66,6 +69,9 @@ export default function Probability() {
       {option === 'poissonDistribution' && (
         <FormPoisson dispatch={dispatch} option={option} maxVariables={numbers.length} />
       )}
+      {option === 'normalDistribution' && (
+        <FormNormal dispatch={dispatch} option={option} maxVariables={numbers.length} />
+      )}
 
       {!option && <MethodSelectionDistribution dispatch={dispatch} options={OPTIONS} />}
 
@@ -86,6 +92,10 @@ export default function Probability() {
 
       {option === 'poissonDistribution' && result && (
         <DistributionTablePoisson variableName={state.variableName} result={result} />
+      )}
+
+      {option === 'normalDistribution' && result && (
+        <DistributionTableNormal variableName={state.variableName} result={result} />
       )}
     </div>
   );

@@ -3,6 +3,7 @@ import {
   exponentialDistribution,
   uniformDistributionV2,
   poissonDistribution,
+  normalDistribution,
 } from '../utils/utils.probability';
 
 export const initialState = {
@@ -22,6 +23,9 @@ export const initialState = {
   // UniformV2
   a: null,
   b: null,
+
+  //Normal
+  standardDeviation: null,
 };
 
 export function reducer(state, action) {
@@ -66,12 +70,23 @@ export function reducer(state, action) {
         operator: action.payload.operator,
       };
 
+    case 'setNormalVariables':
+      return {
+        ...state,
+        variableName: action.payload.variableName,
+        mean: action.payload.mean,
+        standardDeviation: action.payload.standardDeviation,
+        compareValue: action.payload.compareValue,
+        operator: action.payload.operator,
+      };
+
     case 'execute': {
       const distribution = {
         uniformDistribution,
         exponentialDistribution,
         uniformDistributionV2,
         poissonDistribution,
+        normalDistribution,
       };
 
       let distributionResult = null;
@@ -108,6 +123,17 @@ export function reducer(state, action) {
           state.compareValue,
           state.operator,
           state.mean
+        );
+      }
+
+      if (state.option === 'normalDistribution') {
+        distributionResult = distribution.normalDistribution(
+          state.numbers,
+          state.variableName,
+          state.mean,
+          state.standardDeviation,
+          state.compareValue,
+          state.operator
         );
       }
 

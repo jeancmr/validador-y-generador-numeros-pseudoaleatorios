@@ -178,3 +178,66 @@ export function poissonDistribution(randomNumbers, variableName, compareValue, o
     probability,
   };
 }
+
+export function normalDistribution(
+  randomNumbers,
+  variableName,
+  mean,
+  standardDeviation,
+  compareValue,
+  operator
+) {
+  if (
+    !randomNumbers.length ||
+    mean === undefined ||
+    standardDeviation === undefined ||
+    randomNumbers.length < 2
+  ) {
+    return { randomNumbers, computedValues: [], probability: 0 };
+  }
+
+  const computedValues = [];
+
+  for (let i = 0; i < randomNumbers.length - 1; i += 2) {
+    const t1 = randomNumbers[i];
+    const t2 = randomNumbers[i + 1];
+
+    if (t1 <= 0) continue; // evitar log(0) o negativo
+
+    const commonFactor = Math.sqrt(-2 * Math.log(t1));
+    const z0 = commonFactor * Math.cos(2 * Math.PI * t2);
+    const z1 = commonFactor * Math.sin(2 * Math.PI * t2);
+
+    const value1 = mean + standardDeviation * z0;
+    const value2 = mean + standardDeviation * z1;
+
+    computedValues.push({
+      random: [t1, t2],
+      value: value1,
+    });
+
+    computedValues.push({
+      random: [t1, t2],
+      value: value2,
+    });
+  }
+
+  const compareFn = {
+    '<': (x) => x < compareValue,
+    '>': (x) => x > compareValue,
+    '=': (x) => x === compareValue,
+    '<=': (x) => x <= compareValue,
+    '>=': (x) => x >= compareValue,
+  };
+
+  const countMatching = computedValues.filter((item) => compareFn[operator](item.value)).length;
+  const probability = (countMatching / computedValues.length).toFixed(4);
+
+  return {
+    randomNumbers,
+    computedValues,
+    probabilityText: `Probabilidad de que ${variableName} sea ${operator} ${compareValue}: ${probability}`,
+    countMatching,
+    probability,
+  };
+}
